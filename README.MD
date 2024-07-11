@@ -1,9 +1,16 @@
 1. Organizar os requisitos
 2. Pensar nos testes necessários a serem feitos para garantir a implementação pretendida da API
-3. Entender os dados do contexto do problema
+3. Entender os dados do contexto do problema 
+
+[[Images/Models.png]]
+
 4. Montar o DER
 
+[[Images/DER.png]]
 
+5. Decidir a arquitetura da solução
+
+![[Images/Architeture.png]]
 | Rota               | Corpo                       | Resposta         | Autenticação | Validação de dados recebidos | Transações | Extra                        | Feito |
 |--------------------|-----------------------------|------------------|--------------|-----------------------------|------------|------------------------------|-------|
 | POST /products/    | Todos os atributos de produto | Any              | Admin        | ✓                           | ✓          |                              |       |
