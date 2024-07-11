@@ -1,8 +1,10 @@
-from interfaces.repositories.productsDatabaseInterface import DatabaseInterface
-from entities.product import Product
 
-class ProductUseCases:
-    def __init__(self, repository: DatabaseInterface):
+from entities.product import Product
+from interfaces.usecases.productsUsecasesInterface import ProductsUsecasesInterface
+from interfaces.repositories.productsDatabaseInterface import ProductsDatabaseInterface
+
+class ProductUseCases(ProductsUsecasesInterface):
+    def __init__(self, repository: ProductsDatabaseInterface):
         self.repository = repository
 
     def add_product(self, product: Product):
