@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from entities.product import Product
 from interfaces.usecases.productsUsecasesInterface import ProductsUsecasesInterface
-from schemas.product import ProductSchema
+from schemas.productSchema import ProductSchema
 
 class ProductsRest:
     def __init__(self, product_usecases: ProductsUsecasesInterface):

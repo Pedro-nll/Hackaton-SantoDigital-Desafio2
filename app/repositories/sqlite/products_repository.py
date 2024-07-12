@@ -13,7 +13,7 @@ class SQLiteProductsRepository(ProductsDatabaseInterface):
             self.connection.execute('PRAGMA foreign_keys = ON;')
             self.connection.execute(
                 '''CREATE TABLE IF NOT EXISTS products (
-                    product_key INTEGER PRIMARY KEY,
+                    product_key INTEGER PRIMARY KEY AUTOINCREMENT,
                     product_price REAL,
                     product_subcategory_key INTEGER,
                     product_sku TEXT,
@@ -29,12 +29,12 @@ class SQLiteProductsRepository(ProductsDatabaseInterface):
             )
 
     def add_product(self, product: Product):
-        sql = '''INSERT INTO products (product_key, product_price, product_subcategory_key, product_sku, product_name,
-                                       model_name, product_description, product_color, product_size, product_style, product_cost) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'''
-        params = (product.productKey, product.productPrice, product.productSubcategoryKey, product.productSKU, 
-                  product.productName, product.modelName, product.productDescription, product.productColor, 
-                  product.productSize, product.productStyle, product.productCost)
+        sql = '''INSERT INTO products (product_price, product_subcategory_key, product_sku, product_name, model_name, 
+                                       product_description, product_color, product_size, product_style, product_cost) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'''
+        params = (product.productPrice, product.productSubcategoryKey, product.productSKU, product.productName, 
+                  product.modelName, product.productDescription, product.productColor, product.productSize, 
+                  product.productStyle, product.productCost)
         self.execute_transaction(sql, params)
 
     def delete_product(self, product_key: int):
