@@ -15,7 +15,7 @@ class ProductsRest:
         router.get("/products/", response_model=list[ProductSchema])(self.read_all_products)
 
     async def create_product(self, product: ProductSchema):
-        product_entity = Product(**product.dict())
+        product_entity = Product(**product.model_dump())
         self.product_usecases.add_product(product_entity)
         return {"message": "Product added successfully"}
 
@@ -24,7 +24,7 @@ class ProductsRest:
         return {"message": "Product deleted successfully"}
 
     async def update_product(self, product_id: int, product: ProductSchema):
-        product_entity = Product(product_id=product_id, **product.dict(exclude={"product_id"}))
+        product_entity = Product(product_id=product_id, **product.model_dump(exclude={"product_id"}))
         self.product_usecases.update_product(product_entity)
         return {"message": "Product updated successfully"}
 
@@ -32,8 +32,8 @@ class ProductsRest:
         product = self.product_usecases.get_product(product_id)
         if not product:
             raise HTTPException(status_code=404, detail="Product not found")
-        return ProductSchema.from_orm(product)
+        return ProductSchema.model_validate(product)
 
     async def read_all_products(self):
         products = self.product_usecases.get_all_products()
-        return [ProductSchema.from_orm(product) for product in products]
+        return [ProductSchema.model_validate(product) for product in products]
