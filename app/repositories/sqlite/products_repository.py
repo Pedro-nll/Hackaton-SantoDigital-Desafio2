@@ -13,7 +13,7 @@ class SQLiteProductsRepository(ProductsDatabaseInterface):
             self.connection.execute('PRAGMA foreign_keys = ON;')
             self.connection.execute(
                 '''CREATE TABLE IF NOT EXISTS products (
-                    product_key INTEGER PRIMARY KEY AUTOINCREMENT,
+                    product_key INTEGER PRIMARY KEY,
                     product_price REAL,
                     product_subcategory_key INTEGER,
                     product_sku TEXT,
@@ -29,12 +29,12 @@ class SQLiteProductsRepository(ProductsDatabaseInterface):
             )
 
     def add_product(self, product: Product):
-        sql = '''INSERT INTO products (product_price, product_subcategory_key, product_sku, product_name, model_name, 
+        sql = '''INSERT INTO products (product_key, product_price, product_subcategory_key, product_sku, product_name, model_name, 
                                        product_description, product_color, product_size, product_style, product_cost) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'''
-        params = (product.productPrice, product.productSubcategoryKey, product.productSKU, product.productName, 
-                  product.modelName, product.productDescription, product.productColor, product.productSize, 
-                  product.productStyle, product.productCost)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'''
+        params = (product.product_key, product.product_price, product.product_subcategory_key, product.product_sku, product.product_name, 
+                  product.model_name, product.product_description, product.product_color, product.product_size, 
+                  product.product_style, product.product_cost)
         self.execute_transaction(sql, params)
 
     def delete_product(self, product_key: int):
@@ -47,9 +47,9 @@ class SQLiteProductsRepository(ProductsDatabaseInterface):
                                     model_name = ?, product_description = ?, product_color = ?, product_size = ?, 
                                     product_style = ?, product_cost = ? 
                  WHERE product_key = ?'''
-        params = (product.productPrice, product.productSubcategoryKey, product.productSKU, product.productName, 
-                  product.modelName, product.productDescription, product.productColor, product.productSize, 
-                  product.productStyle, product.productCost, product.productKey)
+        params = (product.product_price, product.product_subcategory_key, product.product_sku, product.product_name, 
+                  product.model_name, product.product_description, product.product_color, product.product_size, 
+                  product.product_style, product.product_cost, product.product_key)
         self.execute_transaction(sql, params)
 
     def execute_transaction(self, sql: str, params: tuple):

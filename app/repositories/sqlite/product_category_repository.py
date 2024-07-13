@@ -12,14 +12,14 @@ class SQLiteProductCategoriesRepository(ProductsCategoriesDatabaseInterface):
         with self.connection:
             self.connection.execute(
                 '''CREATE TABLE IF NOT EXISTS product_categories (
-                    product_category_key INTEGER PRIMARY KEY AUTOINCREMENT,
+                    product_category_key INTEGER PRIMARY KEY,
                     category_name TEXT
                 )'''
             )
 
     def add_product_category(self, category: ProductCategory):
-        sql = '''INSERT INTO product_categories (category_name) VALUES (?)'''
-        params = (category.categoryName,)
+        sql = '''INSERT INTO product_categories (product_category_key, category_name) VALUES (?, ?)'''
+        params = (category.product_category_key, category.category_name,)
         self.execute_transaction(sql, params)
 
     def get_product_category(self, category_key: int) -> ProductCategory:

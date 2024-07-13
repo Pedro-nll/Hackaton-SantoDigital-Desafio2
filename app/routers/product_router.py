@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from entities.product import Product
 from interfaces.usecases.productsUsecasesInterface import ProductsUsecasesInterface
 from schemas.productSchema import ProductSchema
+from schemas.productSubcategorySchema import ProductSubcategorySchema
 
 class ProductsRest:
     def __init__(self, product_usecases: ProductsUsecasesInterface):
@@ -15,9 +16,27 @@ class ProductsRest:
         router.get("/products/", response_model=list[ProductSchema], tags=["Product"])(self.get_all_products)
 
     async def create_product(self, product: ProductSchema):
-        product_entity = Product(**product.model_dump())
+        product_subcategory = product.product_subcategory_key
+        if isinstance(product_subcategory, ProductSubcategorySchema):
+            product_subcategory = product_subcategory.product_subcategory_key
+
+        product_entity = Product(
+            product_price=product.product_price,
+            product_key=product.product_key,
+            product_subcategory_key=product_subcategory,
+            product_sku=product.product_sku,
+            product_name=product.product_name,
+            model_name=product.product_model_name,
+            product_description=product.product_description,
+            product_color=product.product_color,
+            product_size=product.product_size,
+            product_style=product.product_style,
+            product_cost=product.product_cost
+        )
+
         self.product_usecases.add_product(product_entity)
         return {"message": "Product added successfully"}
+
 
     async def delete_product(self, product_id: int):
         self.product_usecases.delete_product(product_id)

@@ -20,4 +20,9 @@ class ProductCategoriesRest:
         category = self.product_categories_usecase.get_product_category(category_id)
         if not category:
             raise HTTPException(status_code=404, detail="Category not found")
-        return ProductCategorySchema.model_validate(category)
+        
+        category_schema = ProductCategorySchema(
+            category_name= category.category_name,
+            product_category_key= category.product_category_key
+        )
+        return ProductCategorySchema.model_validate(category_schema)

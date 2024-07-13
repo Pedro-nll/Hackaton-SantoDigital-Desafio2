@@ -13,7 +13,7 @@ class SQLiteProductSubcategoriesRepository(ProductsSubcategoriesDatabaseInterfac
             self.connection.execute('PRAGMA foreign_keys = ON;')
             self.connection.execute(
                 '''CREATE TABLE IF NOT EXISTS product_subcategories (
-                    product_subcategory_key INTEGER PRIMARY KEY AUTOINCREMENT,
+                    product_subcategory_key INTEGER PRIMARY KEY,
                     product_category_key INTEGER,
                     subcategory_name TEXT,
                     FOREIGN KEY (product_category_key) REFERENCES product_categories(product_category_key)
@@ -21,8 +21,8 @@ class SQLiteProductSubcategoriesRepository(ProductsSubcategoriesDatabaseInterfac
             )
 
     def add_product_subcategory(self, subcategory: ProductSubcategory):
-        sql = '''INSERT INTO product_subcategories (product_category_key, subcategory_name) VALUES (?, ?)'''
-        params = (subcategory.productCategoryKey, subcategory.subcategoryName)
+        sql = '''INSERT INTO product_subcategories (product_subcategory_key, product_category_key, subcategory_name) VALUES (?, ?, ?)'''
+        params = (subcategory.product_subcategory_key, subcategory.product_category_key, subcategory.subcategory_name)
         self.execute_transaction(sql, params)
 
     def get_product_subcategory(self, subcategory_key: int) -> ProductSubcategory:
