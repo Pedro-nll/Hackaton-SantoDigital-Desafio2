@@ -1,4 +1,3 @@
-
 from entities.product import Product
 from interfaces.usecases.productsUsecasesInterface import ProductsUsecasesInterface
 from interfaces.repositories.productsDatabaseInterface import ProductsDatabaseInterface
