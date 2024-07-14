@@ -98,19 +98,30 @@ class ProductsRest:
         
         products_schema_list = list()
         for product in products:
-            p = ProductSchema(
-                product_price = product.product_price,
-                product_key = product.product_key,
-                product_subcategory_key = product.product_subcategory_key,
-                product_sku = product.product_sku,
-                product_name = product.product_name,
-                product_model_name = product.model_name,
-                product_description = product.product_description,
-                product_color = product.product_color,
-                product_size = product.product_size,
-                product_style = product.product_style,
-                product_cost = product.product_cost
+            category_schema = ProductCategorySchema(
+                category_name=product.product_subcategory_key.product_category_key.category_name,
+                product_category_key=product.product_subcategory_key.product_category_key.product_category_key
+            )
+            
+            subcategory_schema = OutputProductSubcategorySchema(
+                product_subcategory_key=product.product_subcategory_key.product_subcategory_key,
+                subcategory_name=product.product_subcategory_key.subcategory_name,
+                product_category_key=category_schema
+            )
+            
+            p = OutputProductSchema(
+                product_key=product.product_key,
+                product_price=product.product_price,  
+                product_subcategory_key=subcategory_schema,
+                product_sku=product.product_sku,
+                product_name=product.product_name,
+                product_model_name=product.model_name,
+                product_description=product.product_description,
+                product_color=product.product_color,
+                product_size=product.product_size,
+                product_style=product.product_style,
+                product_cost=product.product_cost
             )
             products_schema_list.append(p)
         
-        return [ProductSchema.model_validate(product) for product in products_schema_list]
+        return [OutputProductSchema.model_validate(product) for product in products_schema_list]

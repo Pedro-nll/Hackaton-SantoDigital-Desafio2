@@ -38,4 +38,7 @@ class ProductUseCases(ProductsUsecasesInterface):
         return p
 
     def get_all_products(self) -> list[Product]:
-        return self.repository.get_all_products()
+        products = self.repository.get_all_products()
+        for p in products:
+            p.product_subcategory_key = self.subcategories_usecases.get_product_subcategory(p.product_subcategory_key)
+        return products
