@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException
+from typing import List, Optional
+from fastapi import APIRouter, HTTPException, Query
 from entities.product import Product
 from interfaces.usecases.productsUsecasesInterface import ProductsUsecasesInterface
 from schemas.productSchema import ProductSchema
@@ -16,7 +17,7 @@ class ProductsRest:
         router.delete("/products/{product_id}", response_model=dict, tags=["Product"])(self.delete_product)
         router.put("/products/{product_key}", response_model=dict, tags=["Product"])(self.update_product)
         router.get("/products/{product_key}", response_model=ProductSchema, tags=["Product"])(self.get_product)
-        router.get("/products/", response_model=list[ProductSchema], tags=["Product"])(self.get_all_products)
+        router.get("/products/", response_model=List[ProductSchema], tags=["Product"])(self.get_all_products)
 
     async def create_product(self, product: ProductSchema):
         product_subcategory = product.product_subcategory_key
@@ -93,25 +94,45 @@ class ProductsRest:
         )
         return OutputProductSchema.model_validate(p)
 
-    async def get_all_products(self):
+    async def get_all_products(
+        self,
+        limit: int = Query(10, ge=1),
+        offset: int = Query(0, ge=0),
+        sort_by: Optional[str] = Query(None, regex="^(product_key|product_price|product_name)$"),
+        sort_order: Optional[str] = Query("asc", regex="^(asc|desc)$"),
+        filter_by: Optional[str] = Query(None),
+        filter_value: Optional[str] = Query(None)
+    ):
         products = self.product_usecases.get_all_products()
-        
-        products_schema_list = list()
+
+        # FILTRAGEM
+        if filter_by and filter_value:
+            products = [product for product in products if getattr(product, filter_by) == filter_value]
+
+        # ORDENAÇÃO
+        if sort_by:
+            reverse = sort_order == "desc"
+            products.sort(key=lambda x: getattr(x, sort_by), reverse=reverse)
+
+        # PAGINAÇÃO
+        products = products[offset:offset + limit]
+
+        products_schema_list = []
         for product in products:
             category_schema = ProductCategorySchema(
                 category_name=product.product_subcategory_key.product_category_key.category_name,
                 product_category_key=product.product_subcategory_key.product_category_key.product_category_key
             )
-            
+
             subcategory_schema = OutputProductSubcategorySchema(
                 product_subcategory_key=product.product_subcategory_key.product_subcategory_key,
                 subcategory_name=product.product_subcategory_key.subcategory_name,
                 product_category_key=category_schema
             )
-            
+
             p = OutputProductSchema(
                 product_key=product.product_key,
-                product_price=product.product_price,  
+                product_price=product.product_price,
                 product_subcategory_key=subcategory_schema,
                 product_sku=product.product_sku,
                 product_name=product.product_name,
@@ -123,5 +144,5 @@ class ProductsRest:
                 product_cost=product.product_cost
             )
             products_schema_list.append(p)
-        
+
         return [OutputProductSchema.model_validate(product) for product in products_schema_list]
