@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 class ProductSchema(BaseModel):
     product_price: float
-    product_key: int
+    product_key: Union[int, None]
     product_subcategory_key: Union[int, ProductSubcategorySchema]
     product_sku: str
     product_name: str
