@@ -18,6 +18,12 @@ from repositories.sqlite.sqlite_user_repository import SQLiteUserRepository
 from usecases.user_usecase import UserUseCase
 from routers.login_router import LoginRest
 
+from repositories.sqlite.customers_repository import SQLiteCustomersRepository
+
+from repositories.sqlite.territories_repository import SQLiteTerritoriesRepository
+
+from repositories.sqlite.sales_repository import SQLiteSalesRepository
+
 app = FastAPI()
 
 origins = [
@@ -56,3 +62,9 @@ products_repository = SQLiteProductsRepository(DB_PATH)
 product_usecases = ProductUseCases(products_repository, subcategories_usecases, logger)
 products_rest = ProductsRest(product_usecases)
 products_rest.add_routes(app)
+
+customers_repository = SQLiteCustomersRepository(DB_PATH)
+
+territories_repository = SQLiteTerritoriesRepository(DB_PATH)
+
+sales_repository = SQLiteSalesRepository(DB_PATH)
