@@ -13,6 +13,10 @@ from repositories.sqlite.product_subcategory_repository import SQLiteProductSubc
 from usecases.product_subcategory_usecases import ProductSubcategoriesUseCase
 from routers.product_subcategories_router import ProductSubcategoriesRest
 
+from repositories.sqlite.sqlite_user_repository import SQLiteUserRepository
+from usecases.user_usecase import UserUseCase
+from routers.login_router import LoginRest
+
 app = FastAPI()
 
 origins = [
@@ -28,6 +32,11 @@ app.add_middleware(
 )
 
 DB_PATH = 'santo.db'
+
+user_repository = SQLiteUserRepository(DB_PATH)
+user_usecase = UserUseCase(user_repository)
+login_rest = LoginRest(user_usecase)
+login_rest.add_routes(app)
 
 categories_repository = SQLiteProductCategoriesRepository(DB_PATH)
 categories_usecases = ProductCategoriesUseCase(categories_repository)

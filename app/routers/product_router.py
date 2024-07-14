@@ -1,5 +1,5 @@
 from typing import List, Optional
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
 from entities.product import Product
 from interfaces.usecases.productsUsecasesInterface import ProductsUsecasesInterface
 from schemas.productSchema import ProductSchema
@@ -7,15 +7,31 @@ from schemas.productSubcategorySchema import ProductSubcategorySchema
 from schemas.productCategorySchema import ProductCategorySchema
 from schemas.OutputProductSubcategorySchema import OutputProductSubcategorySchema
 from schemas.OutputProductSchema import OutputProductSchema
+from config.JWTUtility import get_current_admin_user, get_current_user
 
 class ProductsRest:
     def __init__(self, product_usecases: ProductsUsecasesInterface):
         self.product_usecases = product_usecases
 
     def add_routes(self, router: APIRouter):
-        router.post("/products/", response_model=dict, tags=["Product"])(self.create_product)
-        router.delete("/products/{product_id}", response_model=dict, tags=["Product"])(self.delete_product)
-        router.put("/products/{product_key}", response_model=dict, tags=["Product"])(self.update_product)
+        router.post(
+            "/products/",
+            response_model=dict,
+            tags=["Product"],
+            dependencies=[Depends(get_current_admin_user)]
+        )(self.create_product)
+        router.delete(
+            "/products/{product_id}",
+            response_model=dict,
+            tags=["Product"],
+            dependencies=[Depends(get_current_admin_user)]
+        )(self.delete_product)
+        router.put(
+            "/products/{product_key}",
+            response_model=dict,
+            tags=["Product"],
+            dependencies=[Depends(get_current_admin_user)]
+        )(self.update_product)
         router.get("/products/{product_key}", response_model=ProductSchema, tags=["Product"])(self.get_product)
         router.get("/products/", response_model=List[ProductSchema], tags=["Product"])(self.get_all_products)
 
