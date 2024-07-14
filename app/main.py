@@ -35,11 +35,11 @@ categories_rest = ProductCategoriesRest(categories_usecases)
 categories_rest.add_routes(app)
 
 subcategories_repository = SQLiteProductSubcategoriesRepository(DB_PATH)
-subcategories_usecases = ProductSubcategoriesUseCase(subcategories_repository)
+subcategories_usecases = ProductSubcategoriesUseCase(subcategories_repository, categories_usecases)
 subcategories_rest = ProductSubcategoriesRest(subcategories_usecases)
 subcategories_rest.add_routes(app)
 
 products_repository = SQLiteProductsRepository(DB_PATH)
-product_usecases = ProductUseCases(products_repository)
+product_usecases = ProductUseCases(products_repository, subcategories_usecases)
 products_rest = ProductsRest(product_usecases)
 products_rest.add_routes(app)

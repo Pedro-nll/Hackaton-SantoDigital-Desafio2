@@ -3,6 +3,7 @@ from entities.productSubcategories import ProductSubcategory
 from interfaces.usecases.products_subcategories_usecases import ProductSubcategoriesUseCaseInterface
 from schemas.productSubcategorySchema import ProductSubcategorySchema
 from schemas.productCategorySchema import ProductCategorySchema
+from schemas.OutputProductSubcategorySchema import OutputProductSubcategorySchema
 
 class ProductSubcategoriesRest:
     def __init__(self, product_subcategories_usecase: ProductSubcategoriesUseCaseInterface):
@@ -33,10 +34,15 @@ class ProductSubcategoriesRest:
         if not subcategory:
             raise HTTPException(status_code=404, detail="Subcategory not found")
         
-        subcategory_schema = ProductSubcategorySchema(
-            product_subcategory_key = subcategory.product_category_key,
-            subcategory_name = subcategory.subcategory_name,
-            product_category_key = subcategory.product_subcategory_key
+        category_schema = ProductCategorySchema(
+            category_name= subcategory.product_category_key.category_name,
+            product_category_key= subcategory.product_category_key.product_category_key
         )
-        return ProductSubcategorySchema.model_validate(subcategory_schema)
+        
+        subcategory_schema = OutputProductSubcategorySchema(
+            product_subcategory_key = subcategory.product_subcategory_key,
+            subcategory_name = subcategory.subcategory_name,
+            product_category_key = category_schema
+        )
+        return OutputProductSubcategorySchema.model_validate(subcategory_schema)
 

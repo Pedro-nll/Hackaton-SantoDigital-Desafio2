@@ -1,10 +1,12 @@
 from entities.product import Product
 from interfaces.usecases.productsUsecasesInterface import ProductsUsecasesInterface
+from interfaces.usecases.products_subcategories_usecases import ProductSubcategoriesUseCaseInterface
 from interfaces.repositories.productsDatabaseInterface import ProductsDatabaseInterface
 
 class ProductUseCases(ProductsUsecasesInterface):
-    def __init__(self, repository: ProductsDatabaseInterface):
+    def __init__(self, repository: ProductsDatabaseInterface, subcategories_usecases: ProductSubcategoriesUseCaseInterface):
         self.repository = repository
+        self.subcategories_usecases = subcategories_usecases
 
     def add_product(self, product: Product):
         all_products = sorted(self.get_all_products(), key=lambda x: x.product_key)
@@ -31,7 +33,9 @@ class ProductUseCases(ProductsUsecasesInterface):
         self.repository.update_product(product)
 
     def get_product(self, product_id: int) -> Product:
-        return self.repository.get_product(product_id)
+        p = self.repository.get_product(product_id)
+        p.product_subcategory_key = self.subcategories_usecases.get_product_subcategory(p.product_subcategory_key)
+        return p
 
     def get_all_products(self) -> list[Product]:
         return self.repository.get_all_products()

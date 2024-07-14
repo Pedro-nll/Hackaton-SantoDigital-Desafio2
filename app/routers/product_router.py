@@ -3,6 +3,9 @@ from entities.product import Product
 from interfaces.usecases.productsUsecasesInterface import ProductsUsecasesInterface
 from schemas.productSchema import ProductSchema
 from schemas.productSubcategorySchema import ProductSubcategorySchema
+from schemas.productCategorySchema import ProductCategorySchema
+from schemas.OutputProductSubcategorySchema import OutputProductSubcategorySchema
+from schemas.OutputProductSchema import OutputProductSchema
 
 class ProductsRest:
     def __init__(self, product_usecases: ProductsUsecasesInterface):
@@ -64,21 +67,31 @@ class ProductsRest:
         if not product:
             raise HTTPException(status_code=404, detail="Product not found")
         
-        print(product.product_key)
-        p = ProductSchema(
-            product_key = product.product_key,
-            product_price = product.product_price,  
-            product_subcategory_key = product.product_subcategory_key,
-            product_sku = product.product_sku,
-            product_name = product.product_name,
-            product_model_name = product.model_name,
-            product_description = product.product_description,
-            product_color = product.product_color,
-            product_size = product.product_size,
-            product_style = product.product_style,
-            product_cost = product.product_cost
+        category_schema = ProductCategorySchema(
+            category_name=product.product_subcategory_key.product_category_key.category_name,
+            product_category_key=product.product_subcategory_key.product_category_key.product_category_key
         )
-        return ProductSchema.model_validate(p)
+        
+        subcategory_schema = OutputProductSubcategorySchema(
+            product_subcategory_key=product.product_subcategory_key.product_subcategory_key,
+            subcategory_name=product.product_subcategory_key.subcategory_name,
+            product_category_key=category_schema
+        )
+        
+        p = OutputProductSchema(
+            product_key=product.product_key,
+            product_price=product.product_price,  
+            product_subcategory_key=subcategory_schema,
+            product_sku=product.product_sku,
+            product_name=product.product_name,
+            product_model_name=product.model_name,
+            product_description=product.product_description,
+            product_color=product.product_color,
+            product_size=product.product_size,
+            product_style=product.product_style,
+            product_cost=product.product_cost
+        )
+        return OutputProductSchema.model_validate(p)
 
     async def get_all_products(self):
         products = self.product_usecases.get_all_products()
