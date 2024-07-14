@@ -1,5 +1,5 @@
 class Sale:
-    def __init__(self, orderNumber: int, productKey: int, customerKey: int, territoryKey: int, orderQuantity: int, orderLineItem: int, orderDate: str, stockDate: str): 
+    def __init__(self, orderNumber: str, productKey: int, customerKey: int, territoryKey: int, orderQuantity: int, orderLineItem: int, orderDate: str, stockDate: str): 
         self.orderNumber = orderNumber
         self.productKey = productKey
         self.customerKey = customerKey

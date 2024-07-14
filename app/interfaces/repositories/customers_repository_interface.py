@@ -3,7 +3,7 @@ from entities.customer import Customer
 
 class customers_database_interface(ABC):
     @abstractmethod
-    def add_custormer(self, customer: Customer):
+    def add_customer(self, customer: Customer):
         pass
     
     @abstractmethod

@@ -19,6 +19,7 @@ class Sales_usecases(Sales_usecases_interface):
 
     def top_products_for_category(self, category: str) -> list[Product]:
         product_keys = self.repository.top_products_for_category(category)
+        # TODO: N+1
         top_products = list()
         for pk in product_keys:
             product = self.product_usecases.get_product(pk)
@@ -34,6 +35,7 @@ class Sales_usecases(Sales_usecases_interface):
     
     def top_sellers(self) -> str:
         top_sellers_keys = self.repository.top_sellers()
+        # TODO: n+1 Query model e domain model
         top_sellers = list()
         for pk in top_sellers_keys:
             t = self.territory_usecases.get_territory(pk)

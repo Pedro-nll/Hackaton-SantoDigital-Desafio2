@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class Sale_schema(BaseModel):
-    orderNumber: int
+    orderNumber: str
     productKey: int
     customerKey: int
     territoryKey: int

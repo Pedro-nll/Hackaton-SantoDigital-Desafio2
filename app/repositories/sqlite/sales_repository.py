@@ -1,6 +1,8 @@
 import sqlite3
 from entities.sales import Sale
 from interfaces.repositories.sales_repository_interface import Sales_database_interface
+from datetime import datetime
+from collections import defaultdict
 
 class SQLiteSalesRepository(Sales_database_interface):
     def __init__(self, db_path: str):
@@ -13,7 +15,7 @@ class SQLiteSalesRepository(Sales_database_interface):
             self.connection.execute('PRAGMA foreign_keys = ON;')
             self.connection.execute(
                 '''CREATE TABLE IF NOT EXISTS sales (
-                    orderNumber INTEGER PRIMARY KEY,
+                    orderNumber TEXT PRIMARY KEY,
                     productKey INTEGER,
                     customerKey INTEGER,
                     territoryKey INTEGER,
@@ -21,9 +23,9 @@ class SQLiteSalesRepository(Sales_database_interface):
                     orderLineItem INTEGER,
                     orderDate TEXT,
                     stockDate TEXT,
-                    FOREIGN KEY (productKey) REFERENCES products(productKey),
+                    FOREIGN KEY (productKey) REFERENCES products(product_key),
                     FOREIGN KEY (customerKey) REFERENCES customers(customerKey),
-                    FOREIGN KEY (territoryKey) REFERENCES territories(territoryKey)
+                    FOREIGN KEY (territoryKey) REFERENCES territories(salesTerritoryKey)
                 )'''
             )
 
@@ -41,7 +43,13 @@ class SQLiteSalesRepository(Sales_database_interface):
             SELECT productKey, SUM(orderQuantity) AS total_quantity
             FROM sales
             WHERE EXISTS (
-                SELECT 1 FROM products WHERE products.productKey = sales.productKey AND products.category = ?
+                SELECT 1 FROM products WHERE products.product_key = sales.productKey 
+                AND products.product_subcategory_key = (SELECT product_subcategories.product_subcategory_key 
+                                                        FROM product_subcategories 
+                                                        WHERE product_subcategories.product_category_key = (SELECT product_category_key 
+                                                                                                            FROM product_categories 
+                                                                                                            WHERE category_name = ?))
+                
             )
             GROUP BY productKey
             ORDER BY total_quantity DESC
@@ -66,18 +74,25 @@ class SQLiteSalesRepository(Sales_database_interface):
         return row[0] if row else None
 
     def busiest_month(self):
-        # Retorna o mês com mais vendas (em valor total).
         cursor = self.connection.cursor()
         cursor.execute('''
-            SELECT strftime('%m', s.orderDate) AS month, SUM(p.product_price * s.orderQuantity) AS total_sales
+            SELECT s.orderDate, p.product_price, s.orderQuantity
             FROM sales s
             JOIN products p ON s.productKey = p.product_key
-            GROUP BY month
-            ORDER BY total_sales DESC
-            LIMIT 1
         ''')
-        row = cursor.fetchone()
-        return row[0] if row else None
+        rows = cursor.fetchall()
+
+        sales_per_month = defaultdict(float)
+        for orderDate, product_price, orderQuantity in rows:
+            try:
+                date = datetime.strptime(orderDate, '%m/%d/%Y')
+                month = date.strftime('%m')
+                sales_per_month[month] += product_price * orderQuantity
+            except ValueError as e:
+                print(f"Date format error for {orderDate}: {e}")
+
+        busiest_month = max(sales_per_month, key=sales_per_month.get) if sales_per_month else None
+        return busiest_month
 
 
     def top_sellers(self):

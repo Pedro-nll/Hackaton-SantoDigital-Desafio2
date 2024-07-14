@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from interfaces.usecases.sales_usecases_interface import Sales_usecases_interface
+import calendar
 
 from schemas.sale_schema import Sale_schema
 from schemas.productSchema import ProductSchema
@@ -18,10 +19,10 @@ class Sales_rest:
         
     def add_routes(self, router: APIRouter):
         router.post("/sales/", response_model=dict, tags=["Sales"])(self.add_sale)
-        router.post("/sales/top-products/category/{category}", response_model=List[ProductSchema], tags=["Sales"])(self.top_products)
-        router.post("/sales/best-customer", response_model=Customer_schema, tags=["Sales"])(self.best_customer)
-        router.post("/sales/busiest-month", response_model=dict, tags=["Sales"])(self.busiest_month)
-        router.post("/sales/top-sellers", response_model=List[Territory_schema], tags=["Sales"])(self.top_sellers)
+        router.get("/sales/top-products/category/{category}", response_model=List[ProductSchema], tags=["Sales"])(self.top_products)
+        router.get("/sales/best-customer", response_model=Customer_schema, tags=["Sales"])(self.best_customer)
+        router.get("/sales/busiest-month", response_model=dict, tags=["Sales"])(self.busiest_month)
+        router.get("/sales/top-sellers", response_model=List[Territory_schema], tags=["Sales"])(self.top_sellers)
     
     async def add_sale(self, sale: Sale_schema):
         sale_entity = Sale(**sale.model_dump())
@@ -81,16 +82,20 @@ class Sales_rest:
     
     async def busiest_month(self):
         try:
-            month = self.sales_usecases.busiest_month()
-            if month is None:
+            month_numeric = self.sales_usecases.busiest_month()
+            
+            if not month_numeric:
                 raise HTTPException(status_code=404, detail="No sales data available.")
-            return {"busiest_month": month}
+            
+            month_name = calendar.month_name[int(month_numeric)]
+            return {"busiest_month": month_name}
+        
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     
     async def top_sellers(self):
         top_sellers_entities = self.sales_usecases.top_sellers()
-        top_sellers_schema = List()
+        top_sellers_schema = list()
         for s in top_sellers_entities:
             seller = Territory_schema(
                 salesTerritoryKey = s.salesTerritoryKey,
