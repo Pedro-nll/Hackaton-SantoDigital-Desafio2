@@ -49,3 +49,10 @@
 | TC18      | DELETE /products/{id} | Verificar resposta de erro ao tentar deletar um produto com ID inexistente                     |       |
 
 
+PREMISSAS UTILIZADAS PARA A SOLUÇÃO
+Na parte 3 do desafio é requisitada a seguinte porta:
+
+> Rota 4: GET /sales/top-sellers
+> Retorna os vendedores que tiveram vendas com valor acima da média no último ano fiscal
+
+Porém, no banco de dados fornecido (https://www.kaggle.com/datasets/ukveteran/adventure-works?select=AdventureWorks_Territories.csv) não há informações sobre "vendedores". Portanto, assumi que vendedores se refiriam aos territórios de venda.
