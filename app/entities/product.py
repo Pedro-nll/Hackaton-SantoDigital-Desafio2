@@ -11,3 +11,7 @@ class Product:
         self.product_size = product_size
         self.product_style = product_style
         self.product_cost = product_cost
+        
+    def __str__(self):
+        return f"Product (\nproduct_key={self.product_key},\n product_price={self.product_price},\n product_subcategory_key={self.product_subcategory_key},\n product_sku={self.product_sku},\n product_name={self.product_name},\n model_name={self.model_name},\n product_description={self.product_description},\n product_color={self.product_color},\n product_size={self.product_size},\n product_style={self.product_style},\n product_cost={self.product_cost})"
+

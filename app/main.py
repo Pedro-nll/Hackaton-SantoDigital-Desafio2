@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import logging
 
 from routers.product_router import ProductsRest
 from usecases.product_usecases import ProductUseCases
@@ -31,6 +32,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 DB_PATH = 'santo.db'
 
 user_repository = SQLiteUserRepository(DB_PATH)
@@ -49,6 +53,6 @@ subcategories_rest = ProductSubcategoriesRest(subcategories_usecases)
 subcategories_rest.add_routes(app)
 
 products_repository = SQLiteProductsRepository(DB_PATH)
-product_usecases = ProductUseCases(products_repository, subcategories_usecases)
+product_usecases = ProductUseCases(products_repository, subcategories_usecases, logger)
 products_rest = ProductsRest(product_usecases)
 products_rest.add_routes(app)

@@ -35,7 +35,7 @@ class ProductsRest:
         router.get("/products/{product_key}", response_model=ProductSchema, tags=["Product"])(self.get_product)
         router.get("/products/", response_model=List[ProductSchema], tags=["Product"])(self.get_all_products)
 
-    async def create_product(self, product: ProductSchema):
+    async def create_product(self, product: ProductSchema, current_user = Depends(get_current_admin_user)):
         product_subcategory = product.product_subcategory_key
         if isinstance(product_subcategory, ProductSubcategorySchema):
             product_subcategory = product_subcategory.product_subcategory_key
@@ -54,15 +54,15 @@ class ProductsRest:
             product_cost = product.product_cost
         )
 
-        self.product_usecases.add_product(product_entity)
+        self.product_usecases.add_product(product_entity, current_user)
         return {"message": "Product added successfully"}
 
 
-    async def delete_product(self, product_id: int):
-        self.product_usecases.delete_product(product_id)
+    async def delete_product(self, product_id: int, current_user = Depends(get_current_admin_user)):
+        self.product_usecases.delete_product(product_id, current_user)
         return {"message": "Product deleted successfully"}
 
-    async def update_product(self, product_key: int, product: ProductSchema):
+    async def update_product(self, product_key: int, product: ProductSchema, current_user = Depends(get_current_admin_user)):
         product_entity = Product(
                 product_key=product_key, 
                 product_price = product.product_price,
@@ -76,7 +76,7 @@ class ProductsRest:
                 product_style = product.product_style,
                 product_cost = product.product_cost
             )
-        self.product_usecases.update_product(product_entity)
+        self.product_usecases.update_product(product_entity, current_user)
         return {"message": "Product updated successfully"}
 
     async def get_product(self, product_key: int):
