@@ -1,3 +1,5 @@
 fastapi[all]
 pyjwt
 passlib
+pytest
+pytest-cov
