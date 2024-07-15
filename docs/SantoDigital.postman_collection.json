@@ -1,0 +1,478 @@
+{
+	"info": {
+		"_postman_id": "ca355f1c-bbfa-4655-9805-34d4962da96c",
+		"name": "SantoDigital",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30347235"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/products/2",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"products",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/products",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZWRybyIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTcyMDk4NTA0N30.3WilSGYcZkMtcOoRRbhPN1IOpwXQI88sjj6QeO5O9x4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product_price\": 1700.99,\n    \"product_key\": 581,\n    \"product_subcategory_key\": 2,\n    \"product_sku\": \"BK-R79Y-42\",\n    \"product_name\": \"Road-350-W Yellow, 42\",\n    \"product_model_name\": \"Road-350-W\",\n    \"product_description\": \"Cross-train, race, or just socialize on a sleek, aerodynamic bike designed for a woman.  Advanced seat technology provides comfort all day.\",\n    \"product_color\": \"AMARELO\",\n    \"product_size\": \"42\",\n    \"product_style\": \"W\",\n    \"product_cost\": 1082.51\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/products/2",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"products",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZWRybyIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTcyMDk4NTA0N30.3WilSGYcZkMtcOoRRbhPN1IOpwXQI88sjj6QeO5O9x4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product_price\": 10.10,\n    \"product_key\": 3,\n    \"product_subcategory_key\": 1,\n    \"product_sku\": \"nao sei o que eh sku\",\n    \"product_name\": \"produto de teste\",\n    \"product_model_name\": \"teste\",\n    \"product_description\": \"produto\",\n    \"product_color\": \"verde\",\n    \"product_size\": \"giga\",\n    \"product_style\": \"bem feito\",\n    \"product_cost\": 10.10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/products",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwZWRybyIsInJvbGUiOiJBRE1JTiIsImV4cCI6MTcyMDk4NTA0N30.3WilSGYcZkMtcOoRRbhPN1IOpwXQI88sjj6QeO5O9x4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/products/2",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"products",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "login",
+			"item": [
+				{
+					"name": "register-admin user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"teste\",\n    \"password\": \"123\",\n    \"role\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/register-admin",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"register-admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"teste\",\n    \"password\": \"123\",\n    \"role\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/login",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "sub category",
+			"item": [
+				{
+					"name": "get subcat",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/subcategories/50",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"subcategories",
+								"50"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post subcat",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product_subcategory_key\": 50,\n    \"subcategory_name\": \"TESTE\",\n    \"product_category_key\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/subcategories/",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"subcategories",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "category",
+			"item": [
+				{
+					"name": "get category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/categories/50",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"categories",
+								"50"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post category",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product_category_key\": 50,\n    \"category_name\": \"TESTE\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/categories/",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"categories",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "customer",
+			"item": [
+				{
+					"name": "post customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/customers/",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"customers",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "territory",
+			"item": [
+				{
+					"name": "Post territory",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/territory",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"territory"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "sales",
+			"item": [
+				{
+					"name": "add sale",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/sales",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"sales"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "top-products-category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/sales/top-products/category/Bikes",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"sales",
+								"top-products",
+								"category",
+								"Bikes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "best-customer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/sales/best-customer",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"sales",
+								"best-customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "busiest-month",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/sales/busiest-month",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"sales",
+								"busiest-month"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "top-sellers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/sales/top-sellers",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"sales",
+								"top-sellers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "HOST",
+			"value": "http://127.0.0.1:8000",
+			"type": "string"
+		}
+	]
+}

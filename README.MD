@@ -2,8 +2,8 @@
 Este repositório contém minha solução para o Desafio 2 do hackathon da Santo Digital em parceria com a PUC Minas. 
 
 ## Instruções para utilização
-1. Buildar o docker file com "docker build -t NOME-DA-IMAGEM ."
-2. Rodar a imagem docker com "docker run -p 8000:8000 NOME-DA-IMAGEM"
+1. Buildar o docker file com "docker build -t nome-da-imagem ."
+2. Rodar a imagem docker com "docker run -p 8000:8000 nome-da-imagem"
 3. Rodar o script de inicialização de dados com "python3 ./inicializandoDadosDoBDMock.py
 
 ## Organização dos artefatos
@@ -23,6 +23,7 @@ A aplicação toda se encontra na pasta "app". Dentro dela temos o arquivo "main
 - Pydantic
 - SQLite
 - pyjwt/passlib
+- pytest
 
 ## Premissas
 Na parte 3 do desafio é requisitada a seguinte porta:
