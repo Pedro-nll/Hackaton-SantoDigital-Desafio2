@@ -4,7 +4,8 @@ import pandas as pd
 from typing import Union
 from pydantic import BaseModel
 
-# Define schemas
+HOST = 'http://127.0.0.1:8000'
+
 class ProductCategorySchema(BaseModel):
     product_category_key: int
     category_name: str
@@ -58,28 +59,42 @@ class SaleSchema(BaseModel):
     orderDate: str
     stockDate: str
     
+def register_admin_user():
+    register_data = {
+        "username": "teste",
+        "password": "123",
+        "role": ""
+    }
+    response = requests.post(f'{HOST}/register-admin', json=register_data)
+    response.raise_for_status()
+
 def get_jwt_token():
     login_data = {
         "username": "teste",
         "password": "123",
         "role": ""
     }
-    response = requests.post('http://127.0.0.1:8000/login', json=login_data)
+    response = requests.post(f'{HOST}/login', json=login_data)
     response.raise_for_status()
     return response.json().get('access_token')
 
 
+try:
+    register_admin_user()
+except requests.HTTPError as e:
+    if e.response.status_code != 400:
+        raise e
+
 token = get_jwt_token()
 headers = {'Authorization': f'Bearer {token}'}
 
-# Define functions to post data
 def post_category(category_key, category_name):
     category = ProductCategorySchema(
         product_category_key=category_key,
         category_name=category_name
     )
     try:
-        response = requests.post('http://127.0.0.1:8000/categories/', json=category.dict())
+        response = requests.post(f'{HOST}/categories/', json=category.dict(), headers=headers)
         response.raise_for_status()
     except requests.HTTPError:
         pass
@@ -91,35 +106,35 @@ def post_subcategory(subcategory_key, subcategory_name, category):
         product_category_key=category
     )
     try:
-        response = requests.post('http://127.0.0.1:8000/subcategories/', json=subcategory.dict())
+        response = requests.post(f'{HOST}/subcategories/', json=subcategory.dict(), headers=headers)
         response.raise_for_status()
     except requests.HTTPError:
         pass
 
 def post_product(product):
     try:
-        response = requests.post('http://127.0.0.1:8000/products/', json=product.dict(), headers=headers)
+        response = requests.post(f'{HOST}/products/', json=product.dict(), headers=headers)
         response.raise_for_status()
     except requests.HTTPError:
         pass
 
 def post_territory(territory):
     try:
-        response = requests.post('http://127.0.0.1:8000/territories/', json=territory.dict())
+        response = requests.post(f'{HOST}/territories/', json=territory.dict())
         response.raise_for_status()
     except requests.HTTPError:
         pass
 
 def post_customer(customer):
     try:
-        response = requests.post('http://127.0.0.1:8000/customers/', json=customer.dict())
+        response = requests.post(f'{HOST}/customers/', json=customer.dict())
         response.raise_for_status()
     except requests.HTTPError:
         pass
 
 def post_sale(sale):
     try:
-        response = requests.post('http://127.0.0.1:8000/sales/', json=sale.dict())
+        response = requests.post(f'{HOST}/sales/', json=sale.dict())
         response.raise_for_status()
     except requests.HTTPError:
         pass
@@ -219,4 +234,3 @@ process_territories()
 process_customers()
 process_products()
 process_sales()
-

@@ -1,6 +1,11 @@
 # Introdução
 Este repositório contém minha solução para o Desafio 2 do hackathon da Santo Digital em parceria com a PUC Minas. 
 
+## Instruções para utilização
+1. Buildar o docker file com "docker build -t NOME-DA-IMAGEM ."
+2. Rodar a imagem docker com "docker run -p 8000:8000 NOME-DA-IMAGEM"
+3. Rodar o script de inicialização de dados com "python3 ./inicializandoDadosDoBDMock.py
+
 ## Organização dos artefatos
 Os dados, documentos e imagens se encontram na pasta docs. Dentro dela, a pasta Data contém os arquivos referentes ao banco de dados fornecido. A pasta images e documentos contém imagens e arquivos auxiliares utilizados para compor este README. Além disso, está presente em docs um arquivo JSON que pode ser importado para o Postman com requests para teste da API. 
 A aplicação toda se encontra na pasta "app". Dentro dela temos o arquivo "main.py" que instancia a aplicação e diversas pastas:
